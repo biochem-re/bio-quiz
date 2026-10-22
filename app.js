@@ -7,12 +7,12 @@
   ];
   const KEYS = ["A", "B", "C", "D"];
 
-  // 評語（評点 0〜20 から）
+  // 標語（0〜20 の数字から）
   const GRADES = [
-    { min: 17, g: "A" },
-    { min: 13, g: "B" },
-    { min: 9, g: "C" },
-    { min: 5, g: "D" },
+    { min: 16, g: "A" },
+    { min: 11, g: "B" },
+    { min: 6, g: "C" },
+    { min: 1, g: "D" },
     { min: 0, g: "E" },
   ];
 
@@ -156,8 +156,7 @@
     const ok = log.filter(l => l.ok).length;
     const ev = evaluate(log);
 
-    $("pt").textContent = ev.pt;
-    $("grade").textContent = ev.grade.g;
+    $("grade").textContent = `${ev.pt}${ev.grade.g}`;
     $("grade").dataset.g = ev.grade.g;
     const rows = [
       ["解答数", `${n}問`],
@@ -207,7 +206,7 @@
       $("tierList").appendChild(li);
     });
     const best = store.get("bestA", null);
-    $("best").textContent = best ? `これまでの最高成績：評点 ${best.pt} / 20（評語 ${best.g}・${best.n}問）` : "";
+    $("best").textContent = best ? `これまでの最高成績：${best.pt}${GRADES.find(g => best.pt >= g.min).g}（${best.n}問）` : "";
     $("meta").textContent = "";
     show("start");
   }

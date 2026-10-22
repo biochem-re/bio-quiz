@@ -72,10 +72,10 @@ h1{margin:0 0 8px;font-size:1.5rem}
 .report{border:3px double var(--navy);border-radius:6px;padding:18px 18px 12px;margin:6px 0 14px;background:#fffdf7}
 .reportTitle{text-align:center;font-size:1.5rem;font-weight:800;letter-spacing:.3em;color:var(--navy)}
 .reportSub{text-align:center;color:var(--sub);font-size:.9rem;margin-bottom:14px}
-.marks{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--navy);margin-bottom:14px}
+.marks{max-width:240px;margin:0 auto 14px;border:1.5px solid var(--navy)}
 .mark+.mark{border-left:1.5px solid var(--navy)}
 .mLabel{background:var(--navy);color:#fff;text-align:center;font-weight:700;letter-spacing:.3em;padding:4px}
-.mVal{text-align:center;font-size:2.6rem;font-weight:800;color:var(--navy);padding:6px 0}
+.mVal{text-align:center;font-size:3rem;font-weight:800;color:var(--navy);padding:6px 0}
 .mVal small{font-size:1rem;color:var(--sub)}
 .grade[data-g="A"]{color:#c0392b}.grade[data-g="B"]{color:#d35400}.grade[data-g="C"]{color:var(--navy)}
 .grade[data-g="D"]{color:#5b6577}.grade[data-g="E"]{color:#7f8c8d}

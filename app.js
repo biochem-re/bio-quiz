@@ -55,9 +55,14 @@
     return null;
   }
 
+  // 画面が切り替わったら上端へ（解説へのスムーズスクロール中でも打ち消す）
+  function toTop() {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }
+
   function show(id) {
     for (const s of ["start", "quiz", "result"]) $(s).hidden = s !== id;
-    window.scrollTo(0, 0);
+    toTop();
   }
 
   function start(tier) {
@@ -99,6 +104,7 @@
       box.appendChild(b);
     });
     $("feedback").hidden = true;
+    toTop();
   }
 
   function answer(i) {

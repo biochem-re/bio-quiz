@@ -7,28 +7,15 @@
   ];
   const KEYS = ["A", "B", "C", "D"];
 
-  // 評語（評点 0〜20 から）とその時の表情・コメント
+  // 評語（評点 0〜20 から）
   const GRADES = [
-    { min: 17, g: "A", mood: "joy", talk: ["すごすぎる！完璧に近いぞ！", "生物マスターだ！先生も驚くね！"] },
-    { min: 13, g: "B", mood: "happy", talk: ["なかなかやるね！あと少しでAだ！", "いい感じ！得意分野が見えてきた！"] },
-    { min: 9, g: "C", mood: "idle", talk: ["まずまず！解説を読めばもっと伸びるよ", "半分くらいはいけたね。次はBを狙おう！"] },
-    { min: 5, g: "D", mood: "nervous", talk: ["うーん、ちょっと苦戦したね…", "解説を読んで、もう一回いってみよう！"] },
-    { min: 0, g: "E", mood: "cry", talk: ["うわーん、難しかった…", "今日はここから！次はきっと上がるよ！"] },
+    { min: 17, g: "A" },
+    { min: 13, g: "B" },
+    { min: 9, g: "C" },
+    { min: 5, g: "D" },
+    { min: 0, g: "E" },
   ];
 
-  const TALK = {
-    think: [
-      ["これは知ってる…かも？", "落ち着いていこう！", "ウォーミングアップだね"],
-      ["うーん、ちょっと考えさせて…", "これは授業で聞いたような…", "ひっかけに注意だ"],
-      ["これは難問だ…！", "うーむ、手強いぞ…", "ここが勝負どころ！"],
-    ],
-    ok: ["やった！正解！", "さすが！", "その調子！", "よし、覚えてた！"],
-    okUp: ["正解！レベルアップだ！", "やるね！次はもっと難しいぞ！"],
-    okTop: ["最難関も正解！すごい！", "★★★でも余裕だね！"],
-    streak: n => `${n}問連続正解！絶好調！`,
-    ng: ["しまった…！", "ええっ、そっちか…", "くやしい！", "これは覚えておこう…"],
-    ngAfter: "解説を読んで、次こそは！",
-  };
 
   const pools = TIERS.map(t =>
     QUESTIONS[t.lv].map((q, i) => ({ id: t.lv + i, q })).filter(x => x.q[0] === t.d)
@@ -41,21 +28,6 @@
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
   };
 
-  // キャラクターを各所に配置
-  document.querySelectorAll("[data-kun]").forEach(box => box.appendChild($("kunTpl").content.cloneNode(true)));
-  const kunOf = sec => $(sec).querySelector(".kun");
-  function setMood(sec, mood, bubbleId, text) {
-    const k = kunOf(sec);
-    k.dataset.mood = mood;
-    k.classList.remove("pop");
-    void k.getBoundingClientRect();
-    k.classList.add("pop");
-    if (bubbleId) {
-      const b = $(bubbleId);
-      b.textContent = text;
-      b.classList.toggle("thinking", mood === "think");
-    }
-  }
 
   let state;
 
@@ -89,7 +61,7 @@
   }
 
   function start(tier) {
-    state = { tier, log: [], cur: null, answered: false, streak: 0 };
+    state = { tier, log: [], cur: null, answered: false };
     show("quiz");
     ask();
   }
@@ -115,7 +87,6 @@
     $("qlevel").textContent = TIERS[state.tier].name;
     $("qtext").textContent = text;
     updateProgress();
-    setMood("quiz", "think", "talk", rnd(TALK.think[state.tier]));
 
     const box = $("choices");
     box.innerHTML = "";
@@ -144,7 +115,6 @@
 
     state.log.push({ id: cur.id, tier: cur.tier, ok, text: cur.q[1], correct: cur.correct, chosen: cur.choices[i], exp: cur.q[6] });
     store.set("seenA", [...new Set([...store.get("seenA", []), cur.id])]);
-    state.streak = ok ? state.streak + 1 : 0;
 
     const v = $("verdict");
     v.textContent = ok ? "○ 正解！" : `× 不正解　正解は「${cur.correct}」`;
@@ -152,7 +122,6 @@
     $("exp").textContent = cur.q[6];
 
     let msg = "";
-    const wasTier = state.tier;
     if (ok && state.tier < TIERS.length - 1) {
       state.tier++;
       msg = `レベルアップ！ 次は ${TIERS[state.tier].name}`;
@@ -160,19 +129,6 @@
       msg = "最高レベルをキープ！";
     } else {
       msg = "同じレベルでもう1問挑戦しよう";
-    }
-
-    if (ok) {
-      const talk = state.streak >= 3 ? TALK.streak(state.streak)
-        : wasTier === TIERS.length - 1 ? rnd(TALK.okTop)
-        : state.tier > wasTier ? rnd(TALK.okUp) : rnd(TALK.ok);
-      setMood("quiz", wasTier === TIERS.length - 1 || state.streak >= 3 ? "joy" : "happy", "talk", talk);
-    } else {
-      setMood("quiz", "shock", "talk", rnd(TALK.ng));
-      clearTimeout(state.timer);
-      state.timer = setTimeout(() => {
-        if (state.answered && !$("quiz").hidden) setMood("quiz", "sad", "talk", TALK.ngAfter);
-      }, 1400);
     }
 
     const extra = state.log.length >= BASE;
@@ -195,7 +151,6 @@
   }
 
   function finish() {
-    clearTimeout(state.timer);
     const log = state.log;
     const n = log.length;
     const ok = log.filter(l => l.ok).length;
@@ -242,9 +197,6 @@
       ol.appendChild(li);
     }
     show("result");
-    // 発表前に少し考えてから表情が変わる
-    setMood("result", "think", "resultTalk", "結果は…");
-    setTimeout(() => setMood("result", ev.grade.mood, "resultTalk", rnd(ev.grade.talk)), 1200);
   }
 
   function renderStart() {
@@ -257,7 +209,6 @@
     const best = store.get("bestA", null);
     $("best").textContent = best ? `これまでの最高成績：評点 ${best.pt} / 20（評語 ${best.g}・${best.n}問）` : "";
     $("meta").textContent = "";
-    setMood("start", "idle", "startTalk", "いっしょに生物クイズに挑戦しよう！");
     show("start");
   }
 
@@ -267,9 +218,6 @@
   $("next").addEventListener("click", ask);
   $("finishBtn").addEventListener("click", finish);
   $("again").addEventListener("click", renderStart);
-  kunOf("start").addEventListener("click", () =>
-    setMood("start", "happy", "startTalk", rnd(["準備はいい？", "生物って面白いよね！", "★★★まで行けるかな？"]))
-  );
   document.addEventListener("keydown", e => {
     if ($("quiz").hidden || e.metaKey || e.ctrlKey) return;
     const k = e.key.toUpperCase();

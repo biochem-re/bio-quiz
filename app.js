@@ -1,9 +1,6 @@
 (() => {
   const TOTAL = 10;
   const TIERS = [
-    { lv: "b", d: 1, name: "初級者レベル ★" },
-    { lv: "b", d: 2, name: "初級者レベル ★★" },
-    { lv: "b", d: 3, name: "初級者レベル ★★★" },
     { lv: "a", d: 1, name: "塾高生レベル ★" },
     { lv: "a", d: 2, name: "塾高生レベル ★★" },
     { lv: "a", d: 3, name: "塾高生レベル ★★★" },
@@ -33,12 +30,12 @@
 
   // 最近出題した問題を避けて選ぶ（その難度の未出題がなくなったら履歴をリセット）
   function pick(tier) {
-    const seen = new Set(store.get("seen", []));
+    const seen = new Set(store.get("seenA", []));
     const used = new Set(state.log.map(l => l.id));
     let cand = pools[tier].filter(x => !used.has(x.id) && !seen.has(x.id));
     if (!cand.length) {
       const ids = new Set(pools[tier].map(x => x.id));
-      store.set("seen", [...seen].filter(id => !ids.has(id)));
+      store.set("seenA", [...seen].filter(id => !ids.has(id)));
       cand = pools[tier].filter(x => !used.has(x.id));
     }
     return cand[Math.floor(Math.random() * cand.length)];
@@ -68,7 +65,6 @@
     $("progBar").style.width = `${(state.log.length / TOTAL) * 100}%`;
     const badge = $("qlevel");
     badge.textContent = TIERS[state.tier].name;
-    badge.classList.toggle("adv", TIERS[state.tier].lv === "a");
     $("qtext").textContent = text;
 
     const box = $("choices");
@@ -97,7 +93,7 @@
     });
 
     state.log.push({ id: cur.id, tier: cur.tier, ok, text: cur.q[1], correct: cur.correct, chosen: cur.choices[i], exp: cur.q[6] });
-    store.set("seen", [...new Set([...store.get("seen", []), cur.id])]);
+    store.set("seenA", [...new Set([...store.get("seenA", []), cur.id])]);
 
     const v = $("verdict");
     v.textContent = ok ? "○ 正解！" : `× 不正解　正解は「${cur.correct}」`;
@@ -134,11 +130,11 @@
     const score = state.log.filter(l => l.ok).length;
     const top = Math.max(...state.log.filter(l => l.ok).map(l => l.tier), -1);
     $("score").textContent = score;
-    $("reached").textContent = top >= 0 ? `正解した最高レベル：${TIERS[top].name}` : "まずは初級者レベルから挑戦してみよう";
+    $("reached").textContent = top >= 0 ? `正解した最高レベル：${TIERS[top].name}` : "まずは★の問題から正解を目指そう";
     $("meta").textContent = "";
 
-    const best = store.get("best", null);
-    if (!best || score > best.score || (score === best.score && top > best.top)) store.set("best", { score, top });
+    const best = store.get("bestA", null);
+    if (!best || score > best.score || (score === best.score && top > best.top)) store.set("bestA", { score, top });
 
     const ol = $("review");
     ol.innerHTML = "";
@@ -150,7 +146,6 @@
       mark.classList.add(l.ok ? "ok" : "ng");
       const bd = li.querySelector(".badge");
       bd.textContent = TIERS[l.tier].name;
-      bd.classList.toggle("adv", TIERS[l.tier].lv === "a");
       li.querySelector(".q").textContent = l.text;
       li.querySelector(".ans").textContent = l.ok ? `正解：${l.correct}` : `あなたの解答：${l.chosen} ／ 正解：${l.correct}`;
       li.querySelector("details p").textContent = l.exp;
@@ -166,8 +161,8 @@
       li.textContent = t.name;
       $("tierList").appendChild(li);
     });
-    const best = store.get("best", null);
-    $("best").textContent = best ? `これまでの最高記録：${best.score}問正解（${best.top >= 0 ? TIERS[best.top].name : "—"}）` : "";
+    const best = store.get("bestA", null);
+    $("bestA").textContent = best ? `これまでの最高記録：${best.score}問正解（${best.top >= 0 ? TIERS[best.top].name : "—"}）` : "";
     $("meta").textContent = "";
     show("start");
   }

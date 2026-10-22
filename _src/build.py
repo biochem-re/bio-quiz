@@ -1,7 +1,7 @@
 import json,glob,sys,collections,os
 root=os.path.dirname(os.path.abspath(__file__))
 out={}
-for lv,pat in (("b","b"),("a","a")):
+for lv,pat in (("a","a"),):
     qs=[]
     for f in sorted(glob.glob(f"{root}/orig_{pat}.json"))+sorted(glob.glob(f"{root}/{pat}[0-9]*.json")):
         try: data=json.load(open(f))

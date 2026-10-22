@@ -12,16 +12,78 @@
   <div class="meta" id="meta"></div>
 </header>
 
+<!-- 学ランの男子高校生（表情は data-mood で切り替え） -->
+<template id="kunTpl">
+<svg class="kun" viewBox="0 0 120 140" data-mood="idle" role="img" aria-label="学ランを着た男子高校生">
+  <g class="body">
+    <path d="M14,140 Q16,102 44,92 L76,92 Q104,102 106,140 Z" fill="#1b1e27"/>
+    <rect x="52" y="76" width="16" height="18" fill="#f3d2b3"/>
+    <path d="M43,84 Q60,94 77,84 L77,93 Q60,101 43,93 Z" fill="#12141b"/>
+    <path d="M45,88 Q60,96 75,88" fill="none" stroke="#fff" stroke-width="1.6"/>
+    <rect x="46" y="91" width="4" height="3" rx=".6" fill="#d4af37"/>
+    <line x1="60" y1="99" x2="60" y2="140" stroke="#0c0e13" stroke-width="1"/>
+    <circle cx="60" cy="108" r="2.6" fill="#d4af37"/>
+    <circle cx="60" cy="121" r="2.6" fill="#d4af37"/>
+    <circle cx="60" cy="134" r="2.6" fill="#d4af37"/>
+  </g>
+  <g class="head">
+    <circle cx="30" cy="57" r="6" fill="#f3d2b3"/>
+    <circle cx="90" cy="57" r="6" fill="#f3d2b3"/>
+    <ellipse cx="60" cy="54" rx="30" ry="31" fill="#f6d9bd"/>
+    <path d="M28,54 Q24,18 60,16 Q96,18 92,54 Q90,40 82,33 Q74,41 62,35 Q50,43 38,37 Q31,44 28,54 Z" fill="#1a1a1f"/>
+    <!-- まゆ -->
+    <g class="p on-idle on-happy on-joy" stroke="#1a1a1f" stroke-width="2.4" stroke-linecap="round"><path d="M42,47 L53,46"/><path d="M67,46 L78,47"/></g>
+    <g class="p on-think" stroke="#1a1a1f" stroke-width="2.4" stroke-linecap="round"><path d="M42,48 L53,48"/><path d="M67,44 Q72,40 78,43"/></g>
+    <g class="p on-sad on-cry on-nervous" stroke="#1a1a1f" stroke-width="2.4" stroke-linecap="round"><path d="M42,48 L53,44"/><path d="M67,44 L78,48"/></g>
+    <g class="p on-shock" stroke="#1a1a1f" stroke-width="2.4" stroke-linecap="round"><path d="M42,43 Q47,40 53,42"/><path d="M67,42 Q73,40 78,43"/></g>
+    <!-- 目 -->
+    <g class="p on-idle on-sad on-nervous" fill="#222"><ellipse cx="48" cy="58" rx="3" ry="4"/><ellipse cx="72" cy="58" rx="3" ry="4"/></g>
+    <g class="p on-think" fill="#222"><ellipse cx="50" cy="55" rx="3" ry="4"/><ellipse cx="74" cy="55" rx="3" ry="4"/></g>
+    <g class="p on-happy on-joy" fill="none" stroke="#222" stroke-width="2.4" stroke-linecap="round"><path d="M43,59 Q48,53 53,59"/><path d="M67,59 Q72,53 77,59"/></g>
+    <g class="p on-shock"><circle cx="48" cy="57" r="4.6" fill="#fff" stroke="#222" stroke-width="1.2"/><circle cx="72" cy="57" r="4.6" fill="#fff" stroke="#222" stroke-width="1.2"/><circle cx="48" cy="57" r="2" fill="#222"/><circle cx="72" cy="57" r="2" fill="#222"/></g>
+    <g class="p on-cry" fill="none" stroke="#222" stroke-width="2.4" stroke-linecap="round"><path d="M43,57 Q48,62 53,57"/><path d="M67,57 Q72,62 77,57"/></g>
+    <!-- 口 -->
+    <path class="p on-idle" d="M52,72 Q60,78 68,72" fill="none" stroke="#7a3b2e" stroke-width="2.2" stroke-linecap="round"/>
+    <path class="p on-happy on-joy" d="M49,69 Q60,86 71,69 Z" fill="#b8423a"/>
+    <path class="p on-think" d="M53,74 Q56.5,71 60,74 Q63.5,77 67,74" fill="none" stroke="#7a3b2e" stroke-width="2.2" stroke-linecap="round"/>
+    <path class="p on-sad on-cry" d="M52,77 Q60,70 68,77" fill="none" stroke="#7a3b2e" stroke-width="2.2" stroke-linecap="round"/>
+    <path class="p on-nervous" d="M53,74 L67,74" stroke="#7a3b2e" stroke-width="2.2" stroke-linecap="round"/>
+    <ellipse class="p on-shock" cx="60" cy="74" rx="3.6" ry="4.6" fill="#7a3b2e"/>
+    <!-- ほお・汗・涙 -->
+    <g class="p on-happy on-joy" fill="#f08a8a" opacity=".55"><ellipse cx="41" cy="67" rx="5" ry="2.6"/><ellipse cx="79" cy="67" rx="5" ry="2.6"/></g>
+    <path class="p on-sad on-shock on-nervous" d="M88,36 Q83,45 88,48 Q93,45 88,36 Z" fill="#8cc8f0"/>
+    <g class="p on-cry" fill="#8cc8f0"><path d="M45,62 Q42,70 45,74 Q48,70 45,62 Z"/><path d="M75,62 Q72,70 75,74 Q78,70 75,62 Z"/></g>
+  </g>
+  <!-- 考えるポーズ（あごに手） -->
+  <g class="p on-think">
+    <path d="M100,140 Q104,112 86,100 L76,92 Q72,96 74,102 L84,110 Q90,120 88,140 Z" fill="#1b1e27"/>
+    <ellipse cx="72" cy="88" rx="9" ry="7" fill="#f3d2b3"/>
+    <path d="M66,85 Q71,83 77,85" fill="none" stroke="#d9a983" stroke-width="1.2"/>
+  </g>
+  <!-- キラキラ -->
+  <g class="p on-joy" fill="#f5b800">
+    <path d="M14,28 l2.5,6 6,2.5 -6,2.5 -2.5,6 -2.5,-6 -6,-2.5 6,-2.5 Z"/>
+    <path d="M104,20 l2,5 5,2 -5,2 -2,5 -2,-5 -5,-2 5,-2 Z"/>
+    <path d="M108,62 l1.5,3.5 3.5,1.5 -3.5,1.5 -1.5,3.5 -1.5,-3.5 -3.5,-1.5 3.5,-1.5 Z"/>
+  </g>
+</svg>
+</template>
+
 <main>
   <!-- スタート -->
   <section id="start" class="card">
+    <div class="hero">
+      <div class="kunBox big" data-kun></div>
+      <div class="bubble" id="startTalk">いっしょに生物クイズに挑戦しよう！</div>
+    </div>
     <h1>生物クイズ</h1>
-    <p class="lead">全10問・1問ずつ答え合わせ。正解するとレベルが上がります。</p>
+    <p class="lead">1問ずつ答え合わせ。正解するとレベルが上がります。<br>基本は10問。10問目からは「解き進める」か「結果を出す」かを選べます。</p>
     <ol class="tiers" id="tierList"></ol>
     <div class="startBtns">
       <button class="btn primary" data-start="0">スタート</button>
     </div>
     <p class="note" id="best"></p>
+    <p class="disclaimer">※このクイズはあくまでエンターテインメントです。実際の塾高の授業内容をすべて反映しているわけではありません。</p>
   </section>
 
   <!-- 出題 -->
@@ -31,27 +93,51 @@
       <span id="qnum"></span>
       <span class="badge" id="qlevel"></span>
     </div>
+    <div class="buddy">
+      <div class="kunBox" data-kun></div>
+      <div class="bubble" id="talk"></div>
+    </div>
     <p class="qtext" id="qtext"></p>
     <div class="choices" id="choices"></div>
     <div class="feedback" id="feedback" hidden>
       <div class="verdict" id="verdict"></div>
       <p class="exp" id="exp"></p>
       <p class="levelMsg" id="levelMsg"></p>
-      <button class="btn primary" id="next">次の問題へ</button>
+      <div class="nextBtns">
+        <button class="btn primary" id="next">次の問題へ</button>
+        <button class="btn" id="finishBtn" hidden>結果を出す</button>
+      </div>
     </div>
   </section>
 
-  <!-- 結果 -->
+  <!-- 結果（成績表） -->
   <section id="result" class="card" hidden>
-    <h1>結果</h1>
-    <div class="score"><span id="score"></span><small> / 10問正解</small></div>
-    <p class="reached" id="reached"></p>
+    <div class="hero">
+      <div class="kunBox big" data-kun></div>
+      <div class="bubble" id="resultTalk"></div>
+    </div>
+    <div class="report">
+      <div class="reportTitle">成 績 通 知 表</div>
+      <div class="reportSub">生物クイズ（塾高生レベル）</div>
+      <div class="marks">
+        <div class="mark"><div class="mLabel">評 点</div><div class="mVal"><span id="pt"></span><small> / 20</small></div></div>
+        <div class="mark"><div class="mLabel">評 語</div><div class="mVal grade" id="grade"></div></div>
+      </div>
+      <table class="rtable">
+        <tbody id="rbody"></tbody>
+      </table>
+      <p class="rnote">評点は正答数と難易度（★1点・★★2点・★★★3点）から、0〜20の21段階で算出しています。<br>評語　A：17〜20　B：13〜16　C：9〜12　D：5〜8　E：0〜4</p>
+    </div>
+    <p class="disclaimer">※この成績はクイズ上のエンターテインメントであり、実際の塾高の授業や成績とは関係ありません。</p>
+    <h2 class="revHead">解答の振り返り</h2>
     <ol class="review" id="review"></ol>
     <div class="startBtns">
       <button class="btn primary" id="again">もう一度挑戦する</button>
     </div>
   </section>
 </main>
+
+<footer class="foot">このクイズはエンターテインメントであり、実際の塾高の授業内容をすべて反映しているわけではありません。</footer>
 
 <script src="questions.js"></script>
 <script src="app.js"></script>
